@@ -1,16 +1,14 @@
-import React from "react";
-import Link from "next/link";
+"use client";
+import Navbar from "../components/Navbar";
+import HeroSection from "../components/HeroSection";
+import SocialMedia from "../components/SocialMedia";
 
-const page = () => {
+export default function Home() {
   return (
-    <div>
-      <h1 className="text-center">
-        Bienvenidos aqui sera la home de la startup Alcolabs{" "}
-      </h1>
-      <p className="text-center">Esta es la pagina de inicio</p>
-      <Link href="about"></Link>
+    <div className="relative">
+      <Navbar />
+      <HeroSection />
+      <SocialMedia />
     </div>
   );
-};
-
-export default page;
+}
