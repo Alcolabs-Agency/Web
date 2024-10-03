@@ -16,7 +16,7 @@ const WhyChooseUs = () => {
                     />
                 </div>
                 <div className="flex-1 max-w-[50%] flex flex-col justify-center px-8">
-                    <h1 className="text-4xl font-extrabold --font-sf-pro">Why Choose Us</h1>
+                    <h1 className="text-5xl font-extrabold --font-sf-pro">Why Choose Us</h1>
                     <p className="text-base mt-4 --font-sf-pro">
                         At Alcolabs, we are more than just a web development agency: we are your allies in digital transformation. These are the reasons why companies trust us to boost their online presence: 
                     </p>
@@ -25,7 +25,7 @@ const WhyChooseUs = () => {
                         We believe that every business is unique. Our team designs and develops custom websites that reflect the essence of your brand, ensuring they are perfectly tailored to your specific needs and goals.
                     </p> 
                     <h3 className="font-extrabold mt-4 --font-sf-pro">2. Experience in Web 3.0:</h3>
-                    <p className="--font-sf-pro">
+                    <p className="--font-sf-pro ">
                         As pioneers in integrating cutting-edge technology, we offer hassle-free solutions for your transition to Web 3.0, including cryptocurrency payment systems and decentralized platforms.
                     </p>
                     <h3 className="font-extrabold mt-4">3. User-centered design:</h3>
