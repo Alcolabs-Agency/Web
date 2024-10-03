@@ -16,7 +16,7 @@ const AboutOur = () => {
                     />
                 </div>
                 <div className="flex-1 max-w-[50%] flex flex-col justify-center px-8">
-                    <h1 className="text-5xl font-extrabold --font-sf-pro">About Our Services</h1>
+                    <h1 className="text-5xl font-extrabold --font-sf-pro">About Our Services</h1> <br/>
                     <p className="text-base mt-2 --font-sf-pro">
                         At Alcolabs, we understand that every business is unique, and as such, we offer custom digital solutions that are tailored to your specific needs. Our goal is to create digital experiences that are not only visually appealing, but also function effectively to drive your business growth.
                         <br /><br />

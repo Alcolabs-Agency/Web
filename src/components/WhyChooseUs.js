@@ -16,7 +16,7 @@ const WhyChooseUs = () => {
                     />
                 </div>
                 <div className="flex-1 max-w-[50%] flex flex-col justify-center px-8">
-                    <h1 className="text-5xl font-extrabold --font-sf-pro">Why Choose Us</h1>
+                    <h1 className="text-5xl font-extrabold --font-sf-pro">Why Choose Us</h1> <br/>
                     <p className="text-base mt-4 --font-sf-pro">
                         At Alcolabs, we are more than just a web development agency: we are your allies in digital transformation. These are the reasons why companies trust us to boost their online presence: 
                     </p>
