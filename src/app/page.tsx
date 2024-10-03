@@ -5,6 +5,8 @@ import SocialMedia from "../components/SocialMedia";
 import PeopleComments from "../components/PeopleComments";
 import AboutUs from "../components/AboutUs";
 import Footer from "../components/Footer";
+import Calendar from "../components/Calendar";
+
 export default function Home() {
   return (
     <div className="relative">
@@ -13,6 +15,7 @@ export default function Home() {
       <SocialMedia />
       <PeopleComments />
       <AboutUs />
+      <Calendar />
       <Footer />
     </div>
   );

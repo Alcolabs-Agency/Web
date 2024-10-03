@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const AboutUs = () => {
   return (
-    <section className="bg-gradient-to-r from-purple-900 via-purple-800 to-black py-12 mx-auto">
+    <section className="bg-gradient-to-r from-purple-900 via-purple-800 to-black py-20 mx-auto">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center">
         <div className="relative w-[477px] h-[596px] mr-auto">
           <Image 
