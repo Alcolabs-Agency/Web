@@ -24,8 +24,8 @@ const Testimonial: React.FC<TestimonialProps> = ({ name, location, text, imageUr
             />
             </div>
             <div>
-            <h3 className="text-lg font-semibold">{name}</h3>
-            <p className="text-sm text-gray-500">{location}</p>
+            <h3 className="text-lg font-bold">{name}</h3>
+            <p className="text-sm text-gray-500 hidden md:block">{location}</p>
             </div>
         </div>
       </div>
