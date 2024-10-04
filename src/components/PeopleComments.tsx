@@ -29,7 +29,7 @@ const PeopleComments = () => {
         },
       ];
     return(
-    <div className="bg-gradient-to-r from-purple-900 via-purple-800 to-black py-12 px-4 pb-72">
+    <div className="bg-gradient-to-r from-purple-900 via-purple-800 to-black py-12 px-4 pb-72 w-full overflow-hidden min-h-screen">
       <h2 className="text-center text-white text-5xl font-bold mb-20">
         What people are saying about us
       </h2>

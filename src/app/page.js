@@ -8,7 +8,7 @@ export default function Home() {
     
     
     
-    <div className="relative bg-gradient-to-r">
+    <div className="relative bg-gradient-to-r from-purple-900 via-purple-800 to-black w-full min-h-screen">
       <AboutOur />
       <WhyChooseUs />
       <Analytics />
