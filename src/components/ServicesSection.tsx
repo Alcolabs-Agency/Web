@@ -5,7 +5,7 @@ import React from "react";
 const ServicesSection = () => {
   return (
     <section className="relative py-16 text-white bg-gradient-to-r from-[#000000] to-[#5232A1]">
-      <div className="relative z-10 container mx-auto px-12"> {/* Agregar el mismo px-16 aquí */}
+      <div className="relative z-10 container mx-auto px-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-2 p-8 rounded-lg shadow-lg bg-white">
             <Image
