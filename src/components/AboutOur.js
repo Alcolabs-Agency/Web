@@ -5,7 +5,7 @@ import Image from "next/image";
 const AboutOur = () => {
     return (
         <section className="flex justify-center items-center px-4 py-16 bg-gradient-to-r from-[#5232A1] via-[#4007b9] to-black text-white min-h-screen">
-    <div className="flex flex-col md:flex-row gap-16 w-full max-w-7xl">
+    <div className="flex flex-col md:flex-row gap-14 w-full max-w-6xl">
       <div className="flex-1 w-full md:hidden flex justify-center">
             <Image
                 src="/images/image1.jpg"
