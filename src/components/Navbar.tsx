@@ -9,16 +9,16 @@ const Navbar = () => {
     //algo
   }, []);
   return (
-    <nav className="flex items-center px-16 py-4 absolute top-2 left-0 right-0 z-10 bg-transparent">
-      <div className="flex items-center space-x-14">
+    <nav className="flex items-center px-16 py-6 absolute top-3 left-14 right-0 z-10 bg-transparent">
+      <div className="flex items-center space-x-8">
         <Image
           src="/images/Logo horizontal2.png"
           alt="Alcolab Logo"
-          width={180}
-          height={40}
+          width={150}
+          height={50}
         />
-
-        <div className="flex space-x-14 text-white">
+        <div className="flex space-x-10  text-white font-bold text-xl">
+          
           <Link href="#about">About Us</Link>
           <Link href="#services">Services</Link>
           <Link href="#solution">Solution</Link>

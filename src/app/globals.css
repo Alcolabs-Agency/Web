@@ -2,10 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-gradient-to-r {
-  background: linear-gradient(90deg, rgba(82,50,161,1) 0%, rgba(82,50,161,1) 100%);
+
+
+body {
+  background: linear-gradient(80deg, #5232A1 100%, #000000 0%);
+  color: #ffffff; 
 }
 
+
+.bg-gradient {
+  background: linear-gradient(100deg, #5232A1 100%, #000000 110%);
+}
 
 
 
