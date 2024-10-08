@@ -2,10 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'SF-bold';
+  src: url('/fonts/SF-Pro-Display-Bold.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF-regular';
+  src: url('/fonts/SF-Pro-Display-Regular.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SF-medium';
+  src: url('/fonts/SF-Pro-Display-Medium.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .bg-gradient-to-r {
   background: linear-gradient(90deg, rgba(82,50,161,1) 0%, rgba(82,50,161,1) 100%);
 }
 
+body {
+  background-color: #000000;
+}
 
 
 

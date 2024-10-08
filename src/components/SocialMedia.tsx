@@ -8,10 +8,10 @@ const SocialMedia = () => {
       <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
         <FaFacebookF />
       </a>
-      <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+      <a href="https://x.com/alcolabs_agency" target="_blank" rel="noopener noreferrer">
         <FaTwitter />
       </a>
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.instagram.com/alcolabs_agency/" target="_blank" rel="noopener noreferrer">
         <FaInstagram />
       </a>
     </div>
