@@ -1,12 +1,18 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
+import CountUp from "react-countup";
+import ScrollTrigger from "react-scroll-trigger";
 
 const Analytics = () => {
+    const [counter, setCounter] = useState(false)
+
     return(
-        <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-[#3D0079] to-black"> 
+        <ScrollTrigger onEnter={() => setCounter(true)} onExit={() => setCounter(false)}>
+
+            <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-[#3D0079] to-black"> 
             <div className="text-white text-center mb-16">
-                <h1 className="text-5xl font-bold --font-sf-pro mb-4">Analytics</h1>
+                <h1 className="text-5xl font-bold --font-sf-pro mb-4 pb-2">Analytics</h1>
                 <p className="text-base --font-sf-pro">Assisting brands in painting their digital canvases with our technology-infused solutions. Emphasizing on the stats apart from the words.</p>
             </div>
             <div className="flex justify-center space-x-20 text-white">
@@ -17,7 +23,9 @@ const Analytics = () => {
                         width={67}
                         height={80}
                     />
-                    <h3 className="text-3xl font-extrabold mt-4">300+</h3>
+                    <h3 className="text-3xl font-extrabold mt-4 pb-2">
+                        {counter && <CountUp start={0} end={300} duration={2} delay={0}/>} +
+                    </h3>
                     <p className="text-base --font-sf-pro">App Development</p>
                 </div>
                 <div className="flex flex-col items-center">
@@ -27,7 +35,10 @@ const Analytics = () => {
                         width={80}
                         height={80}
                     />
-                    <h3 className="text-3xl font-extrabold mt-4">1250+</h3>
+                    <h3 className="text-3xl font-extrabold mt-4 pb-2">
+                        {counter && <CountUp start={0} end={1250} duration={2} delay={0}/>}
+                        +
+                    </h3>
                     <p className="text-base --font-sf-pro">Clients Worldwide</p>
                 </div>
                 <div className="flex flex-col items-center">
@@ -37,11 +48,17 @@ const Analytics = () => {
                         width={67}
                         height={80}
                     />
-                    <h3 className="text-3xl font-extrabold mt-4">50+</h3>
+                    <h3 className="text-3xl font-extrabold mt-4 pb-2">
+                        {counter && <CountUp start={0} end={50} duration={2} delay={0}/>}
+                        +
+                    </h3>
                     <p className="text-base --font-sf-pro">Blockchain Projects</p>
                 </div>
             </div>
         </section>
+
+        </ScrollTrigger>
+        
     )
 }
 
