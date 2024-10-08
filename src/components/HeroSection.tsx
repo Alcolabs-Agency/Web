@@ -4,10 +4,10 @@ import Image from "next/legacy/image";
 
 const HeroSection = () => {
   return (
-    <section className="relative flex justify-between items-center px-32 py-40 bg-gradient-to-tr from-[#5232A1] to-[#000000] min-h-screen">
+    <section className="relative flex justify-between items-center px-32 py-40 bg-gradient-to-r from-[#5232A1] via-[#4007b9] to-black text-white min-h-screen">
       <div className="relative z-10 container mx-auto px-0">
         <h1 className="text-6xl font-extrabold mb-10">
-          ASK <span className="text-[#552bc0]">ANYTHING</span>
+          ASK <span className="text-[#201146]">ANYTHING</span>
           <br />
           ANYTIME
           <br />

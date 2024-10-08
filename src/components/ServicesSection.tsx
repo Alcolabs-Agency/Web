@@ -7,7 +7,7 @@ import { HiOutlineDesktopComputer } from "react-icons/hi";
 
 const ServicesSection = () => {
   return (
-    <section className="elative py-16 text-white bg-gradient-to-tl from-[#000000] to-[#5232A1]">
+    <section className="flex justify-center items-center px-4 py-16 bg-gradient-to-r from-[#5232A1] via-[#4007b9] to-black text-white min-h-screen">
       <div className="relative z-10 container mx-auto px-20"> 
       
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 -mt-16">
@@ -20,7 +20,7 @@ const ServicesSection = () => {
           </div>
 
         
-          <div className="p-6 rounded-lg shadow-lg bg-[#5232A1] text-white">
+          <div className="p-6 rounded-lg shadow-lg bg-[#501bd6] text-white">
             <div className="flex items-center mb-3">
               <FaUsers className="text-6xl mr-2" />
               <h3 className="text-1xl font-semibold">Web 3 Consulting and Adaptation</h3>

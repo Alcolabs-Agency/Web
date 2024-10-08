@@ -4,11 +4,11 @@ const AboutUs = () => {
   return (
     <section
       id="aboutus"
-      className="bg-gradient-to-r from-purple-900 via-purple-800 to-black pt-20 pb-72 mx-auto"
+      className="elative flex justify-between items-center px-32 py-40 bg-gradient-to-r from-[#5232A1] via-[#4007b9] to-black text-white min-h-screen"
     
     >
       <div className="absolute top-0 left-0 w-full h-32" style={{
-        background: 'linear-gradient(0deg, rgba(4,4,4,0) 0%, rgba(4,4,4,1) 100%)',
+        background: 'linear-gradient(0deg, rgba(4,4,4,0) 0%, rgba(4,4,5,1)100%)',
       }}></div>
 
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center relative z-10">
