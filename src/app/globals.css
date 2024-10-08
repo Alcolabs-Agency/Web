@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+<<<<<<< HEAD
+@font-face {
+  font-family: "SF-bold";
+  src: url("/fonts/SF-Pro-Display-Bold.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+=======
 
 
 body {
@@ -12,8 +19,33 @@ body {
 
 .bg-gradient {
   background: linear-gradient(100deg, #5232A1 100%, #000000 110%);
+>>>>>>> Yesenia
 }
 
+@font-face {
+  font-family: "SF-regular";
+  src: url("/fonts/SF-Pro-Display-Regular.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SF-medium";
+  src: url("/fonts/SF-Pro-Display-Medium.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.bg-gradient-to-r {
+  /*background: rgb(0 , 0, 0);*/
+  background: linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(82, 50, 161) 100%);
+}
+
+<<<<<<< HEAD
+body {
+  background-color: #000000;
+}
+=======
 
 
 
@@ -73,6 +105,4 @@ body {
 
 
 
-
-
-
+>>>>>>> Yesenia
