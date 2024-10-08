@@ -33,7 +33,12 @@ const PeopleComments = () => {
     <section
       className="relative py-20 px-0 pb-72"
       style={{
-        background: 'linear-gradient(90deg, rgba(48,0,82,1) 0%, rgba(4,4,4,1) 60%)',
+        background: `
+          radial-gradient(circle at 10% 20%, rgba(48,0,82,0.7), transparent 60%),
+          radial-gradient(circle at 40% 30%, rgba(48,0,82,0.4), transparent 80%),
+          radial-gradient(circle at 50% 70%, rgba(48,0,82,0.3), transparent 90%),
+          black
+        `,
       }}
     >
       <div className="relative z-10 max-w-6xl mx-auto">
@@ -52,8 +57,8 @@ const PeopleComments = () => {
           ))}
         </div>
       </div>
-      
 
+      {/* Gradiente de transición para suavizar el final */}
       <div className="absolute bottom-0 left-0 w-full h-32" style={{
         background: 'linear-gradient(180deg, rgba(4,4,4,0) 0%, rgba(4,4,4,1) 100%)',
       }}></div>

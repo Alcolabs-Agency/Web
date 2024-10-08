@@ -27,7 +27,7 @@ const Footer = () => {
         <div className="flex justify-end">
 
           <div className="mx-20">
-            <h3 className="text-lg font-semibold text-purple-950 mb-4">Home</h3>
+            <h3 className="text-lg font-semibold text-purple-900 mb-4">Home</h3>
             <ul className="text-left">
               <li className="mb-2">
                 <a href="#aboutus" className="text-white hover:text-purple-200 font-SFmedium">About Us</a>
@@ -42,7 +42,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-purple-950 mb-4 font-SFmedium">Follow Us</h3>
+            <h3 className="text-lg font-semibold text-purple-900 mb-4 font-SFmedium">Follow Us</h3>
             <ul className="flex flex-col items-start space-y-2">
               <li className="flex items-center space-x-2">
                 <FaLinkedinIn className="text-white hover:text-purple-200" />
