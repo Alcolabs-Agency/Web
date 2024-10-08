@@ -13,16 +13,17 @@ const Calendar = () => {
         />
     </div>
 
-    {/* Contenido para Desktop */}
-    <div className="relative z-10 w-full mx-auto flex justify-end items-start md:flex md:justify-end md:items-start">
-        <div className="bg-white rounded-lg shadow-lg p-8 w-2/3 hidden md:block"> {/* Calendario solo visible en desktop */}
-            <iframe
-                src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2ikaQl6EbM5OcLjvW5ma-2mF8aJVXk4N7avO1VkHrthgNkpvSotxHtEahBXxrVjQxzAegLvx_C?gv=true"
-                style={{ border: 0 }}
-                width="100%"
-                height="393"
-                title="Google Calendar Scheduling"
-            ></iframe>
+      <div className="relative z-10 w-full mx-auto flex justify-end items-start">
+        <div className="bg-white rounded-lg shadow-lg w-2/3">
+          <iframe
+            src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2ikaQl6EbM5OcLjvW5ma-2mF8aJVXk4N7avO1VkHrthgNkpvSotxHtEahBXxrVjQxzAegLvx_C?gv=true"
+            style={{ border: 0}}
+            width="100%"
+            height="500"
+            frameBorder="0"
+            scrolling="yes"
+            title="Google Calendar Scheduling"
+          ></iframe>
         </div>
 
         {/* Botón solo visible en móviles */}

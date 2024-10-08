@@ -9,7 +9,7 @@ interface TestimonialProps {
 
 const Testimonial: React.FC<TestimonialProps> = ({ name, location, text, imageUrl }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
       <div className="ml-1 text-purple-900 font-semibold">★★★★★</div>
       <p className="text-gray-700 text-base pt-5">&ldquo;{text}&ldquo;</p>
       <div className="flex items-center mt-4 pt-5">
