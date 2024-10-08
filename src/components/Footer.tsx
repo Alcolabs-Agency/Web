@@ -9,7 +9,7 @@ const Footer = () => {
         background: 'linear-gradient(90deg, rgba(4,4,4,1) 75%, rgba(32,15,45,1) 97%)',
       }}
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
+      <div className=" max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
 
         <div>
           <Image 
@@ -24,22 +24,21 @@ const Footer = () => {
           
         </div>
 
-        <div className="flex justify-end">
-
-          <div className="mx-20">
-            <h3 className="text-lg font-semibold text-purple-950 mb-4">Home</h3>
-            <ul className="text-left">
-              <li className="mb-2">
-                <a href="#aboutus" className="text-white hover:text-purple-200 font-SFmedium">About Us</a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-white hover:text-purple-200 font-SFmedium">Services</a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-white hover:text-purple-200 font-SFmedium">Solution</a>
-              </li>
-            </ul>
-          </div>
+        <div className="flex justify-center md:justify-end space-x-20">
+        <div className="flex flex-col items-center md:items-start">
+          <h3 className="text-lg font-semibold text-purple-950 mb-4">Home</h3>
+          <ul className="text-center md:text-left">
+            <li className="mb-2">
+              <a href="#" className="text-white hover:text-purple-200">About Us</a>
+            </li>
+            <li className="mb-2">
+              <a href="#" className="text-white hover:text-purple-200">Services</a>
+            </li>
+            <li className="mb-2">
+              <a href="#" className="text-white hover:text-purple-200">Solution</a>
+            </li>
+          </ul>
+        </div>
 
           <div>
             <h3 className="text-lg font-semibold text-purple-950 mb-4 font-SFmedium">Follow Us</h3>

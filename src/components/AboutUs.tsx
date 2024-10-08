@@ -4,10 +4,8 @@ const AboutUs = () => {
   return (
     <section
       id="aboutus"
-      className="pt-20 pb-72 mx-auto relative"
-      style={{
-        background: 'linear-gradient(90deg, rgba(4,4,4,1) 40%, rgba(48,0,82,1) 100%)',
-      }}
+      className="bg-gradient-to-r from-purple-900 via-purple-800 to-black pt-20 pb-72 mx-auto"
+    
     >
       <div className="absolute top-0 left-0 w-full h-32" style={{
         background: 'linear-gradient(0deg, rgba(4,4,4,0) 0%, rgba(4,4,4,1) 100%)',
@@ -20,7 +18,7 @@ const AboutUs = () => {
             alt="About Us Image"
             width={477}
             height={596}
-            className="object-cover"
+            className="w-full h-full object-cover rounded-md md:rounded-none"
           />
         </div>
 

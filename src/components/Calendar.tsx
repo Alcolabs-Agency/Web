@@ -2,8 +2,8 @@ import Image from 'next/image';
 
 const Calendar = () => {
   return (
-<section className="relative w-full h-[579px] flex items-center justify-center">
-    <div className="absolute inset-0 z-0">
+<section className="relative w-full flex items-center justify-center">
+    <div className="">
         <Image
             src="/images/BgCalendar.png"
             alt="Background Image"
@@ -13,8 +13,8 @@ const Calendar = () => {
         />
     </div>
 
-      <div className="relative z-10 w-full mx-auto flex justify-end items-start">
-        <div className="bg-white rounded-lg shadow-lg w-2/3">
+      <div className="relative z-10 w-full mx-auto flex justify-end items-start md:flex md:justify-end md:items-start">
+        <div className="bg-white rounded-lg shadow-lg p-8 w-2/3 hidden md:block">
           <iframe
             src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2ikaQl6EbM5OcLjvW5ma-2mF8aJVXk4N7avO1VkHrthgNkpvSotxHtEahBXxrVjQxzAegLvx_C?gv=true"
             style={{ border: 0}}

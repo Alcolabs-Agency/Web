@@ -31,13 +31,13 @@ const PeopleComments = () => {
 
   return (
     <section
-      className="relative py-20 px-0 pb-72"
+      className="bg-gradient-to-r from-purple-900 via-purple-800 to-black py-12 px-4 pb-72 w-full overflow-hidden min-h-screen"
       style={{
         background: 'linear-gradient(90deg, rgba(48,0,82,1) 0%, rgba(4,4,4,1) 60%)',
       }}
     >
       <div className="relative z-10 max-w-6xl mx-auto">
-        <h2 className="text-center text-white text-5xl font-bold mb-20">
+        <h2 className="text-[30px] md:text-5xl mx-5 text-center text-white text-5xl font-bold mb-20">
           What people are saying about us
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
