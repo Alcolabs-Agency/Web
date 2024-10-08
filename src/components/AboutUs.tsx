@@ -6,12 +6,11 @@ const AboutUs = () => {
       id="aboutus"
       className="pt-20 pb-72 mx-auto relative"
       style={{
-        background: 'linear-gradient(90deg, rgba(4,4,4,1) 40%, rgba(48,0,82,1) 100%)', // Mismo gradiente actual
+        background: 'linear-gradient(90deg, rgba(4,4,4,1) 40%, rgba(48,0,82,1) 100%)',
       }}
     >
-      {/* Gradiente de transición desde arriba más suave */}
       <div className="absolute top-0 left-0 w-full h-32" style={{
-        background: 'linear-gradient(0deg, rgba(4,4,4,0) 0%, rgba(4,4,4,1) 100%)', // Gradiente extendido para suavizar la transición
+        background: 'linear-gradient(0deg, rgba(4,4,4,0) 0%, rgba(4,4,4,1) 100%)',
       }}></div>
 
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center relative z-10">

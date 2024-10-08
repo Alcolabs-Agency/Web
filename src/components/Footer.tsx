@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FaFacebookF, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaLinkedinIn, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -45,16 +45,16 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-purple-950 mb-4 font-SFmedium">Follow Us</h3>
             <ul className="flex flex-col items-start space-y-2">
               <li className="flex items-center space-x-2">
-                <FaFacebookF className="text-white hover:text-purple-200" />
-                <a href="#" className="text-white hover:text-purple-200 font-SFmedium">Facebook</a>
+                <FaLinkedinIn className="text-white hover:text-purple-200" />
+                <a href="https://www.linkedin.com/company/alcolab" className="text-white hover:text-purple-200 font-SFmedium">LinkedIn</a>
               </li>
               <li className="flex items-center space-x-2">
                 <FaTwitter className="text-white hover:text-purple-200" />
-                <a href="#" className="text-white hover:text-purple-200 font-SFmedium">Twitter</a>
+                <a href="https://x.com/alcolabs_agency" className="text-white hover:text-purple-200 font-SFmedium">Twitter</a>
               </li>
               <li className="flex items-center space-x-2">
                 <FaInstagram className="text-white hover:text-purple-200" />
-                <a href="#" className="text-white hover:text-purple-200 font-SFmedium">Instagram</a>
+                <a href="https://www.instagram.com/alcolabs_agency/" className="text-white hover:text-purple-200 font-SFmedium">Instagram</a>
               </li>
             </ul>
           </div>
