@@ -12,19 +12,13 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
-<<<<<<< HEAD
       fontFamily:{
         SFbold: ['SF-bold', 'sans-serif'],
         SFregular: ['SF-regular', 'sans-serif'],
         SFmedium: ['SF-medium', 'sans-serif']
-      }
-=======
-      fontFamily: {
-        sans: ["sans-serif", "bold", "italic", "medium", "extra-bold", "black", "semi-bold"],
+        }
+        
       },
->>>>>>> Yesenia
     },
-  },
-  plugins: [],
-};
+  }
 export default config;
