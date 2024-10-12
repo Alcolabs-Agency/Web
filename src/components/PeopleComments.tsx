@@ -31,13 +31,13 @@ const PeopleComments = () => {
 
   return (
     <section
-      className="flex justify-center items-center px-4 py-16 bg-gradient-to-r from-[#5232A1] via-[#4007b9] to-black text-white min-h-screen"
+      className="flex justify-center items-center px-4 -mt-28 bg-gradient-to-r from-[#5232A1] via-[#4007b9] to-black text-white min-h-screen"
       style={{
         background: 'linear-gradient(90deg, #5232A1 50%, #000000 100%)',
       }}
     >
       <div className="relative z-10 max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-5xl text-center font-extrabold mb-14">
+        <h2 className="text-3xl md:text-5xl text-center font-extrabold mb-16">
           What people are saying about us
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
