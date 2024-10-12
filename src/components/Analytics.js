@@ -11,9 +11,9 @@ const Analytics = () => {
         <ScrollTrigger onEnter={() => setCounter(true)} onExit={() => setCounter(false)}>
 
             <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-[#3D0079] to-black"> 
-            <div className="text-white text-center mb-16">
-                <h1 className="text-5xl font-bold --font-sf-pro mb-4">Analytics</h1>
-                <p className="text-base --font-sf-pro mx-4 md:mx-8">Assisting brands in painting their digital canvases with our technology-infused solutions. Emphasizing on the stats apart from the words.</p>
+            <div className="text-white text-center mb-40">
+                <h1 className="text-5xl font-bold --font-sf-pro mb-28">Analytics</h1>
+                <p className="text-base --font-sf-pro mx-4 md:mx-8 -mb-12">Assisting brands in painting their digital canvases with our technology-infused solutions. Emphasizing on the stats apart from the words.</p>
             </div>
             <div className="flex flex-col md:flex-row justify-center mx-4 md:space-x-20 text-white">
                 <div className="flex flex-col items-center">
