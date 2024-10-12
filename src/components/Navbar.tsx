@@ -1,14 +1,9 @@
-"use client";
-import Image from "next/legacy/image";
+/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    
-  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -17,12 +12,14 @@ const Navbar = () => {
   return (
     <nav className="flex items-center px-16 py-6 absolute top-3 left-14 right-0 z-10 bg-transparent">
       <div className="flex items-center space-x-8">
-        <Image
-          src="/images/Logo horizontal2.png"
+        
+        <img
+          src="/images/Frame 48095441 2.svg"
           alt="Alcolab Logo"
           width={150}
           height={40}
         />
+        
         <button
           className="md:hidden flex items-center mb-5 text-white"
           onClick={toggleMenu}
@@ -42,7 +39,7 @@ const Navbar = () => {
             />
           </svg>
         </button>
-        {/* Menú para dispositivos móviles */}
+
         {isOpen && (
           <div className="absolute top-full left-0 right-0 bg-black bg-opacity-70">
             <div className="flex flex-col items-center space-y-4 py-4 text-white">
@@ -52,7 +49,8 @@ const Navbar = () => {
             </div>
           </div>
         )}
-        <div className="flex space-x-10  text-white font-bold text-xl">
+
+        <div className="flex space-x-10 text-white font-bold text-xl">
           <Link href="#about">About Us</Link>
           <Link href="#services">Services</Link>
           <Link href="#solution">Solution</Link>
