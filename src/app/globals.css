@@ -35,9 +35,9 @@ body {
 
 .bg-gradient-to-r {
 
-  background: linear-gradient(90deg, #5232A1 50%, #000000 100%);
+   background: linear-gradient(90deg, #5232A1 50%, #000000 110%); 
 }
 
 body {
-  background-color: #000000;
+  background-color :#000000;
 }

@@ -6,7 +6,7 @@ const Footer = () => {
     <footer
       className="py-8 text-white"
       style={{
-        background: 'linear-gradient(90deg, rgba(4,4,4,1) -40%, rgba(32,15,45,0) 25%)',
+        background: 'linear-gradient(90deg, rgba(0,0,0,1) 60%, rgba(86,40,163,9) 100%)',
       }}
     >
       <div className=" max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
