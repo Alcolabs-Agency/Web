@@ -39,7 +39,9 @@ const AboutOur = () => {
                 Every project at Alcolabs is a unique collaboration, where we focus on understanding your goals to transform your ideas into digital realities that generate concrete results. We are committed to offering a comprehensive service that covers everything from conceptualization to ongoing maintenance, ensuring that your online presence is always optimized and ready to grow.
             </p>
         </div>
+        
     </div>
+    
 </section>
 
     );

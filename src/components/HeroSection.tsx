@@ -33,6 +33,7 @@ const HeroSection = () => {
           className="object-cover"
         />
       </div>
+      
     </section>
   );
 };
