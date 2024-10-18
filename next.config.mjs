@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
-
-module.exports = {
+const nextConfig = {
   async headers() {
     return [
       {
@@ -13,12 +9,13 @@ module.exports = {
             key: "Content-Security-Policy",
             value: `
               default-src 'self';
-              script-src 'self' https://www.google.com https://www.gstatic.com 'unsafe-inline' 'unsafe-eval';
+              script-src 'self' https://www.google.com https://www.gstatic.com 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net;
+              worker-src 'self' blob:;
+              connect-src 'self' blob: data: https://cdn.jsdelivr.net;
+              img-src 'self' https://www.gstatic.com data: blob:;
               frame-src 'self' https://calendar.google.com;
               style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
-              img-src 'self' https://www.gstatic.com data:;
               font-src 'self' https://fonts.gstatic.com;
-              connect-src 'self';
             `.replace(/\n/g, ''),
           },
         ],
@@ -26,3 +23,5 @@ module.exports = {
     ];
   },
 };
+
+export default nextConfig;
