@@ -16,9 +16,9 @@ const config: Config = {
         SFbold: ['SF-bold', 'sans-serif'],
         SFregular: ['SF-regular', 'sans-serif'],
         SFmedium: ['SF-medium', 'sans-serif']
-        }
-        
-      },
+      }
     },
-  }
+  },
+  plugins: [],
+};
 export default config;
