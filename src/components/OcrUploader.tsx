@@ -1,9 +1,5 @@
-
-
-
-
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import Tesseract from 'tesseract.js';
+import React, { useState, useEffect, ChangeEvent } from 'react';
+import { createWorker, Worker, PSM } from 'tesseract.js';
 import './tableStyles.css';
 
 let pdfjsLib: any;
@@ -12,7 +8,27 @@ if (typeof window !== 'undefined') {
   pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/build/pdf.worker.entry');
 }
 
-const OcrUploader = () => {
+interface Word {
+  level: string;
+  pageNum: string;
+  blockNum: string;
+  parNum: string;
+  lineNum: string;
+  wordNum: string;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  conf: number;
+  text: string;
+}
+
+interface PageData {
+  headers: string[];
+  tableData: string[][];
+}
+
+const OcrUploader: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [image, setImage] = useState<string | null>(null);
   const [text, setText] = useState<string>('');
@@ -22,30 +38,30 @@ const OcrUploader = () => {
   const [tableData, setTableData] = useState<string[][]>([]);
   const [documentColumns, setDocumentColumns] = useState<string[]>([]);
   const [mappedColumns, setMappedColumns] = useState<string[]>([]);
-  const [columnMappingData, setColumnMappingData] = useState<any>({});
+  const [columnMappingData, setColumnMappingData] = useState<{ [key: number]: string[] }>({});
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const [additionalInfo, setAdditionalInfo] = useState<{ [key: string]: string }>({});
 
   const attributesOfSquare = [
-    "Nombre del artículo",
-    "Tipo de artículo",
-    "Descripción",
-    "SKU",
-    "Precio",
-    "Cantidad",
-    "Unidad de Medida"
+    'Nombre del artículo',
+    'Tipo de artículo',
+    'Descripción',
+    'SKU',
+    'Precio',
+    'Cantidad',
+    'Unidad de Medida',
   ];
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.type === 'application/pdf') {
-        processPDF(file);
-      } else if (file.type.startsWith('image/')) {
-        setFile(file);
-        setImage(URL.createObjectURL(file));
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      if (selectedFile.type === 'application/pdf') {
+        processPDF(selectedFile);
+      } else if (selectedFile.type.startsWith('image/')) {
+        setFile(selectedFile);
+        setImage(URL.createObjectURL(selectedFile));
         setError(null);
-        setThumbnails([URL.createObjectURL(file)]);
+        setThumbnails([URL.createObjectURL(selectedFile)]);
       } else {
         setError('Por favor selecciona una imagen o un archivo PDF.');
       }
@@ -64,6 +80,7 @@ const OcrUploader = () => {
   const processPDF = async (file: File) => {
     setLoading(true);
     setProgress(0);
+
     const reader = new FileReader();
 
     reader.onload = async (e) => {
@@ -71,22 +88,33 @@ const OcrUploader = () => {
         const typedarray = new Uint8Array(e.target.result as ArrayBuffer);
         const pdf = await pdfjsLib.getDocument(typedarray).promise;
 
-        let fullText = '';
         const numPages = pdf.numPages;
         const tempThumbnails: string[] = new Array(numPages);
+        let allTablesData: string[][] = [];
+        let documentHeaders: string[] = [];
 
-        //  páginas en paralelo
-        const pagePromises = [];
+        // Procesar páginas secuencialmente y actualizar el progreso
         for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-          pagePromises.push(processPage(pdf, pageNum, numPages, tempThumbnails));
+          const pageData = await processPage(pdf, pageNum, numPages, tempThumbnails);
+          setProgress(Math.round((pageNum / numPages) * 100));
+
+          if (pageData.tableData.length > 0) {
+            if (documentHeaders.length === 0 && pageData.headers.length > 0) {
+              documentHeaders = pageData.headers;
+            }
+            allTablesData = allTablesData.concat(pageData.tableData);
+          }
         }
 
-        const pageTexts = await Promise.all(pagePromises);
-        fullText = pageTexts.join('\n');
+        setThumbnails(tempThumbnails); // Establecer las miniaturas en el orden correcto
 
-        setText(fullText);
-        setThumbnails(tempThumbnails); // miniaturas en el orden correcto
-        processTextToData(fullText);
+        if (allTablesData.length > 0 && documentHeaders.length > 0) {
+          setDocumentColumns(documentHeaders);
+          setTableData(allTablesData);
+        } else {
+          setError('No se pudo detectar ninguna tabla en el documento.');
+        }
+
         setLoading(false);
       }
     };
@@ -94,12 +122,17 @@ const OcrUploader = () => {
     reader.readAsArrayBuffer(file);
   };
 
-  const processPage = async (pdf: any, pageNum: number, numPages: number, tempThumbnails: string[]) => {
+  const processPage = async (
+    pdf: any,
+    pageNum: number,
+    numPages: number,
+    tempThumbnails: string[]
+  ): Promise<PageData> => {
     const page = await pdf.getPage(pageNum);
     const viewport = page.getViewport({ scale: 2.0 });
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
-    let pageText = '';
+    let pageData: PageData = { headers: [], tableData: [] };
 
     if (context) {
       canvas.width = viewport.width;
@@ -107,97 +140,101 @@ const OcrUploader = () => {
       await page.render({ canvasContext: context, viewport }).promise;
 
       const imgData = canvas.toDataURL('image/png');
-      tempThumbnails[pageNum - 1] = imgData; //  en el índice correcto
+      tempThumbnails[pageNum - 1] = imgData; // Almacenar en el índice correcto
 
-      const result = await Tesseract.recognize(imgData, 'spa', {
-        logger: (m) => {
-          if (m.status === 'recognizing text') {
-            setProgress(prevProgress => {
-              const newProgress = Math.round(((pageNum - 1 + m.progress) / numPages) * 100);
-              return newProgress > prevProgress ? newProgress : prevProgress;
-            });
-          }
-        },
+      const worker: Worker = await createWorker();
+
+      await worker.load();
+      await worker.loadLanguage('spa');
+      await worker.initialize('spa');
+      await worker.setParameters({
+        tessedit_char_whitelist:
+          '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúÁÉÍÓÚñÑ,.:-/%$',
+        preserve_interword_spaces: '1',
+        tessedit_pageseg_mode: PSM.AUTO,
       });
 
-      pageText = result.data.text;
+      const { data } = await worker.recognize(imgData);
+
+      await worker.terminate();
+
+      if (data.tsv) {
+        pageData = parseTableFromTSV(data.tsv);
+      }
     }
 
-    return pageText;
+    return pageData;
   };
 
-  const processTextToData = (text: string) => {
-    const lines = text.split('\n').map(line => line.trim()).filter(line => line !== '');
+  const parseTableFromTSV = (tsv: string): PageData => {
+    const lines = tsv.split('\n');
+    const words: Word[] = lines
+      .slice(1)
+      .map((line) => {
+        const [
+          level,
+          pageNum,
+          blockNum,
+          parNum,
+          lineNum,
+          wordNum,
+          left,
+          top,
+          width,
+          height,
+          conf,
+          text,
+        ] = line.split('\t');
+        return {
+          level,
+          pageNum,
+          blockNum,
+          parNum,
+          lineNum,
+          wordNum,
+          left: parseInt(left),
+          top: parseInt(top),
+          width: parseInt(width),
+          height: parseInt(height),
+          conf: parseFloat(conf),
+          text,
+        };
+      })
+      .filter((word) => word.conf > 0 && word.text.trim() !== '');
 
-    // encabezados y datos de la tabla
-    const { headers, dataRows } = extractTableData(lines);
+    const linesMap = new Map<number, Word[]>();
+    words.forEach((word) => {
+      const key = Math.round(word.top / 10);
+      if (!linesMap.has(key)) {
+        linesMap.set(key, []);
+      }
+      linesMap.get(key)?.push(word);
+    });
 
-    if (headers.length === 0) {
-      setError('No se pudo detectar el encabezado de la tabla. Por favor, ajuste manualmente.');
-      setLoading(false);
-      return;
-    }
+    const sortedLines = Array.from(linesMap.values()).sort((a, b) => a[0].top - b[0].top);
 
-    setDocumentColumns(headers);
-    setTableData(dataRows);
-  };
-
-  const extractTableData = (lines: string[]) => {
     let headers: string[] = [];
-    let dataRows: string[][] = [];
+    const dataRows: string[][] = [];
+    let headerDetected = false;
 
-    
-    const headerRegex = /^(.*?(?:cantidad|descripcion|descripción|sku|clave|unidad|precio|importe).*)$/i;
-    const dataRegex = /^[\d\s\w]+$/i;
+    sortedLines.forEach((lineWords) => {
+      const sortedWords = lineWords.sort((a, b) => a.left - b.left);
+      const lineText = sortedWords.map((w) => w.text).join(' ').toLowerCase();
 
-    let headerIndex = -1;
-
-    
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      if (headerRegex.test(line)) {
-        headers = line.split(/\s{2,}|\t|;/).map(cell => cell.trim());
-        headerIndex = i;
-        break;
+      if (
+        !headerDetected &&
+        /cantidad|descripcion|descripción|sku|clave|unidad|precio|importe/.test(lineText)
+      ) {
+        headers = sortedWords.map((w) => w.text);
+        headerDetected = true;
+      } else if (headerDetected) {
+        const row = sortedWords.map((w) => w.text);
+        const adjustedRow = adjustRowLength(row, headers.length);
+        dataRows.push(adjustedRow);
       }
-    }
+    });
 
-    // Si no se encontró encabezadointentar usar palabras clave
-    if (headerIndex === -1) {
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const matches = attributesOfSquare.filter(attr => line.toLowerCase().includes(attr.toLowerCase()));
-        if (matches.length >= 2) {
-          headers = line.split(/\s{2,}|\t|;/).map(cell => cell.trim());
-          headerIndex = i;
-          break;
-        }
-      }
-    }
-
-    
-    if (headerIndex !== -1) {
-      for (let i = headerIndex + 1; i < lines.length; i++) {
-        const line = lines[i];
-
-        if (isEndOfTable(line)) {
-          break;
-        }
-
-        if (dataRegex.test(line)) {
-          const row = line.split(/\s{2,}|\t|;/).map(cell => cell.trim());
-          const adjustedRow = adjustRowLength(row, headers.length);
-          dataRows.push(adjustedRow);
-        }
-      }
-    }
-
-    return { headers, dataRows };
-  };
-
-  const isEndOfTable = (line: string): boolean => {
-    const endTableKeywords = ["subtotal", "total", "iva", "importe", "pago"];
-    return endTableKeywords.some(keyword => line.toLowerCase().includes(keyword));
+    return { headers, tableData: dataRows };
   };
 
   const adjustRowLength = (row: string[], targetLength: number): string[] => {
@@ -212,29 +249,42 @@ const OcrUploader = () => {
     return adjustedRow;
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
     setProgress(0);
 
     if (file && file.type.startsWith('image/')) {
       try {
-        const result = await Tesseract.recognize(URL.createObjectURL(file), 'spa', {
-          logger: (m) => {
-            if (m.status === 'recognizing text') {
-              setProgress(Math.round(m.progress * 100));
-            }
-          },
+        const worker: Worker = await createWorker();
+
+        await worker.load();
+        await worker.loadLanguage('spa');
+        await worker.initialize('spa');
+        await worker.setParameters({
+          tessedit_char_whitelist:
+            '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúÁÉÍÓÚñÑ,.:-/%$',
+          preserve_interword_spaces: '1',
+          tessedit_pageseg_mode: PSM.AUTO,
         });
 
-        const { text } = result.data;
-        setText(text);
-        processTextToData(text);
+        const { data } = await worker.recognize(URL.createObjectURL(file));
+
+        await worker.terminate();
+
+        const { headers, tableData } = parseTableFromTSV(data.tsv);
+
+        if (headers.length > 0 && tableData.length > 0) {
+          setDocumentColumns(headers);
+          setTableData(tableData);
+        } else {
+          setError('No se pudo detectar ninguna tabla en la imagen.');
+        }
       } catch (err) {
         setError('No se pudo procesar la imagen.');
         console.error('Error OCR:', err);
       } finally {
         setLoading(false);
+        setProgress(100);
       }
     }
   };
@@ -246,7 +296,7 @@ const OcrUploader = () => {
 
     const columnIndex = documentColumns.indexOf(value);
     if (columnIndex >= 0) {
-      const selectedData = tableData.map(row => row[columnIndex]);
+      const selectedData = tableData.map((row) => row[columnIndex]);
       const newColumnMappingData = { ...columnMappingData, [index]: selectedData };
       setColumnMappingData(newColumnMappingData);
     }
@@ -256,7 +306,7 @@ const OcrUploader = () => {
     const newColumnName = prompt('Ingrese el nombre de la nueva columna:');
     if (newColumnName) {
       const newDocumentColumns = [...documentColumns, newColumnName];
-      const newTableData = tableData.map(row => [...row, '']);
+      const newTableData = tableData.map((row) => [...row, '']);
       setDocumentColumns(newDocumentColumns);
       setTableData(newTableData);
     }
@@ -266,7 +316,7 @@ const OcrUploader = () => {
     const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta columna?');
     if (confirmDelete) {
       const newDocumentColumns = documentColumns.filter((_, index) => index !== colIndex);
-      const newTableData = tableData.map(row => row.filter((_, index) => index !== colIndex));
+      const newTableData = tableData.map((row) => row.filter((_, index) => index !== colIndex));
       setDocumentColumns(newDocumentColumns);
       setTableData(newTableData);
     }
@@ -298,7 +348,7 @@ const OcrUploader = () => {
     const headers = documentColumns.join(',');
     csvRows.push(headers);
 
-    tableData.forEach(row => {
+    tableData.forEach((row) => {
       csvRows.push(row.join(','));
     });
 
@@ -317,7 +367,9 @@ const OcrUploader = () => {
   return (
     <div className="max-w-7xl mx-auto p-6 bg-white shadow-md rounded-lg">
       <h1 className="text-xl font-bold text-gray-800 mb-4">Subir Imagen o Archivo PDF para OCR</h1>
-      <p className="text-gray-600 mb-6">Cargue una imagen o un archivo PDF para extraer texto y procesarlo en una tabla.</p>
+      <p className="text-gray-600 mb-6">
+        Cargue una imagen o un archivo PDF para extraer texto y procesarlo en una tabla.
+      </p>
 
       <div className="flex space-x-6">
         <input
@@ -331,7 +383,12 @@ const OcrUploader = () => {
       {thumbnails.length > 0 && (
         <div className="mt-6 grid grid-cols-2 gap-4">
           {thumbnails.map((thumbnail, index) => (
-            <img key={index} src={thumbnail} alt={`Página ${index + 1}`} className="w-full h-auto rounded-lg shadow-md" />
+            <img
+              key={index}
+              src={thumbnail}
+              alt={`Página ${index + 1}`}
+              className="w-full h-auto rounded-lg shadow-md"
+            />
           ))}
         </div>
       )}
@@ -340,7 +397,9 @@ const OcrUploader = () => {
         <button
           onClick={handleSubmit}
           disabled={!file || loading}
-          className={`w-auto py-2 px-4 rounded-md text-white font-bold ${loading ? 'bg-indigo-400' : 'bg-indigo-600'} transition-colors duration-300`}
+          className={`w-auto py-2 px-4 rounded-md text-white font-bold ${
+            loading ? 'bg-indigo-400' : 'bg-indigo-600'
+          } transition-colors duration-300`}
         >
           {loading ? `Procesando... ${progress}%` : 'Procesar Documento'}
         </button>
@@ -409,7 +468,7 @@ const OcrUploader = () => {
             </thead>
             <tbody className="text-sm">
               {tableData.map((row, rowIndex) => (
-                <tr key={rowIndex} className={rowIndex % 2 === 0 ? "bg-gray-50" : "bg-blue-100"}>
+                <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-gray-50' : 'bg-blue-100'}>
                   {row.map((cell, colIndex) => (
                     <td key={colIndex} className="border px-4 py-2">
                       <input
@@ -461,7 +520,9 @@ const OcrUploader = () => {
                     </select>
                   </td>
                   <td className="px-4 py-2 border bg-gray-100">
-                    {columnMappingData[index] ? columnMappingData[index].join(', ') : 'No asignado'}
+                    {columnMappingData[index]
+                      ? columnMappingData[index].join(', ')
+                      : 'No asignado'}
                   </td>
                 </tr>
               ))}
