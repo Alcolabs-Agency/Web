@@ -9,14 +9,14 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: `
               default-src 'self';
-              script-src 'self' https://www.google.com https://www.gstatic.com 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net;
+              script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://cdn.jsdelivr.net;
               worker-src 'self' blob:;
-              connect-src 'self' blob: data: https://cdn.jsdelivr.net;
+              connect-src 'self' http://127.0.0.1:5000 http://localhost:5000 blob: data: https://cdn.jsdelivr.net;
               img-src 'self' https://www.gstatic.com data: blob:;
               frame-src 'self' https://calendar.google.com;
-              style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
+              style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
               font-src 'self' https://fonts.gstatic.com;
-            `.replace(/\n/g, ''),
+            `.replace(/\n/g, ""),
           },
         ],
       },

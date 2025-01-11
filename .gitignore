@@ -34,3 +34,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Excluir el entorno virtual
+backend/venv/
+
+# Excluir archivos compilados
+__pycache__/
+*.pyc
+*.pyo
+*.so
+
+# Excluir configuraciones locales
+.env
+*.log
+*.sqlite3
+backend/yolov5/
+
