@@ -1,36 +1,72 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Ver https://help.github.com/articles/ignoring-files/ para más información.
 
-# dependencies
-/node_modules
-/.pnp
+# Dependencias de Node.js
+node_modules/
+.pnp/
 .pnp.js
 .yarn/install-state.gz
 
-# testing
-/coverage
+# Archivos de prueba
+coverage/
 
-# next.js
-/.next/
-/out/
+# Archivos generados por Next.js
+.next/
+out/
 
-# production
-/build
+# Archivos de producción
+build/
 
-# misc
+# Archivos locales del sistema
 .DS_Store
 *.pem
 
-# debug
+# Archivos de depuración
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+# Archivos de configuración local
+.env*
 .env*.local
 
-# vercel
-.vercel
+# Archivos relacionados con Vercel
+.vercel/
 
-# typescript
+# Archivos de TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Excluir entornos virtuales de Python
+backend/venv/
+backend/ocr_env/
+
+# Excluir archivos compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+*.so
+
+# Excluir configuraciones locales de Python
+*.log
+*.sqlite3
+
+# Ignorar datos generados por YOLOv5
+backend/yolov5/
+backend/yolov5/runs/
+backend/yolov5/weights/
+backend/temp/
+backend/ocr_env/
+
+
+# Excluir PDFs u otros documentos temporales
+*.pdf
+
+# Excluir fuentes y archivos multimedia grandes (si no son necesarios en el repositorio)
+*.mp4
+*.mov
+*.avi
+*.jpg
+*.png
+*.otf
+*.woff
+*.woff2
