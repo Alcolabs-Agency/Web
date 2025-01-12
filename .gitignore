@@ -55,6 +55,8 @@ backend/yolov5/
 backend/yolov5/runs/
 backend/yolov5/weights/
 backend/temp/
+backend/ocr_env/
+
 
 # Excluir PDFs u otros documentos temporales
 *.pdf
