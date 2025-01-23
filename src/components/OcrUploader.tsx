@@ -39,6 +39,7 @@ const OcrUploader: React.FC = () => {
     if (selectedFile) {
       setFile(selectedFile);
       setError(null);
+      console.log(selectedFile.type)
 
       if (selectedFile.type.startsWith("image/")) {
         setImage(URL.createObjectURL(selectedFile));
