@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState, useEffect, ChangeEvent } from 'react';
-import './tableStyles.css';
+import React, { useState, useEffect, ChangeEvent } from "react";
+import { ProgressBar } from "react-bootstrap";
+import "./tableStyles.css";
 
 let pdfjsLib: any;
-if (typeof window !== 'undefined') {
-  pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/pdf.worker.min.js';
+if (typeof window !== "undefined") {
+  pdfjsLib = require("pdfjs-dist/legacy/build/pdf");
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "/js/pdf.worker.min.js";
   pdfjsLib.GlobalWorkerOptions.isEvalSupported = false;
 }
 
@@ -24,7 +25,12 @@ const OcrUploader: React.FC = () => {
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [tableData, setTableData] = useState<ExtractedRow[]>([]); // Cambiado para usar ExtractedRow
-  const [documentColumns] = useState<string[]>(['bbox', 'class', 'text', 'confidence']);
+  const [documentColumns] = useState<string[]>([
+    "bbox",
+    "class",
+    "text",
+    "confidence",
+  ]);
   const [thumbnails, setThumbnails] = useState<string[]>([]);
 
   // Función para manejar el cambio de archivo
@@ -34,14 +40,14 @@ const OcrUploader: React.FC = () => {
       setFile(selectedFile);
       setError(null);
 
-      if (selectedFile.type.startsWith('image/')) {
+      if (selectedFile.type.startsWith("image/")) {
         setImage(URL.createObjectURL(selectedFile));
         setThumbnails([]);
-      } else if (selectedFile.type === 'application/pdf') {
+      } else if (selectedFile.type === "application/pdf") {
         setImage(null);
         generatePDFThumbnails(selectedFile);
       } else {
-        setError('Por favor selecciona una imagen o un archivo PDF.');
+        setError("Por favor selecciona una imagen o un archivo PDF.");
         setFile(null);
         setImage(null);
         setThumbnails([]);
@@ -61,28 +67,29 @@ const OcrUploader: React.FC = () => {
       for (let currentPage = 1; currentPage <= numPages; currentPage++) {
         const page = await pdf.getPage(currentPage);
         const viewport = page.getViewport({ scale: 1.5 });
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
         await page.render({ canvasContext: context!, viewport }).promise;
 
-        const imgData = canvas.toDataURL('image/png');
+        const imgData = canvas.toDataURL("image/png");
         tempThumbnails.push(imgData);
       }
 
       setThumbnails(tempThumbnails);
     } catch (error) {
-      console.error('Error al generar miniaturas del PDF:', error);
-      setError('Error al generar miniaturas del PDF.');
+      console.error("Error al generar miniaturas del PDF:", error);
+      setError("Error al generar miniaturas del PDF.");
     }
   };
 
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   // aqui envia a archivo  backend
   const handleSubmit = async () => {
     if (!file) {
-      setError('No se ha seleccionado ningún archivo.');
+      setError("No se ha seleccionado ningún archivo.");
       return;
     }
 
@@ -90,32 +97,51 @@ const OcrUploader: React.FC = () => {
     setProgress(0);
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/process-document', {
-        method: 'POST',
+      const response = await fetch(`${baseUrl}/process-document`, {
+        method: "POST",
         body: formData,
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Error al procesar el documento.');
+        throw new Error(errorData.error || "Error al procesar el documento.");
       }
 
       const result = await response.json();
       const rows: ExtractedRow[] = result.data;
+      const processedImages = result.images; // Imágenes procesadas
 
-      if (rows && Array.isArray(rows)) {
-        setTableData(rows);
+      if (Array.isArray(rows) && rows.length > 0) {
+
+        setTableData(rows.map(row => ({
+          bbox: row.bbox,
+          class: row.class,
+          text: row.text,
+          confidence: typeof row.confidence === 'number' ? row.confidence : 0
+        })));
       } else {
-        setError('No se pudieron extraer datos estructurados del documento.');
+        setError("El modelo no detectó datos en el documento. Verifica que el documento contiene las clases esperadas.");
       }
+      
+
+      if (processedImages?.length > 0) {
+        setThumbnails(
+            processedImages.map((img: string) => `data:image/jpeg;base64,${img}`)
+        );
+    } else {
+        setThumbnails([]);
+    }
+    
 
       setProgress(100);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al procesar el documento.');
-      console.error('Error al procesar el documento:', err);
+      setError(
+        err instanceof Error ? err.message : "Error al procesar el documento."
+      );
+      console.error("Error al procesar el documento:", err);
     } finally {
       setLoading(false);
     }
@@ -133,20 +159,20 @@ const OcrUploader: React.FC = () => {
 
   const exportToCSV = () => {
     const csvRows = [];
-    const headers = documentColumns.join(',');
+    const headers = documentColumns.join(",");
     csvRows.push(headers);
 
     tableData.forEach((row) => {
       csvRows.push(`${row.bbox},${row.class},${row.text},${row.confidence}`);
     });
 
-    const csvContent = csvRows.join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const csvUrl = URL.createObjectURL(blob);
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = csvUrl;
-    link.setAttribute('download', 'datos_extraidos.csv');
+    link.setAttribute("download", "datos_extraidos.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -154,8 +180,13 @@ const OcrUploader: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h1 className="text-xl font-bold text-gray-800 mb-4">Subir Imagen o Archivo PDF para OCR</h1>
-      <p className="text-gray-600 mb-6">Cargue una imagen o un archivo PDF para extraer texto y procesarlo en una tabla.</p>
+      <h1 className="text-xl font-bold text-gray-800 mb-4">
+        Subir Imagen o Archivo PDF para OCR
+      </h1>
+      <p className="text-gray-600 mb-6">
+        Cargue una imagen o un archivo PDF para extraer texto y procesarlo en
+        una tabla.
+      </p>
 
       <div className="flex space-x-6">
         <input
@@ -169,46 +200,71 @@ const OcrUploader: React.FC = () => {
       {image && (
         <div className="mt-6">
           <h3 className="text-lg font-bold">Imagen Subida:</h3>
-          <img src={image} alt="Imagen subida" className="w-full h-auto rounded-lg shadow-md mt-4" />
+          <img
+            src={image}
+            alt="Imagen subida"
+            className="w-full h-auto rounded-lg shadow-md mt-4"
+          />
         </div>
       )}
 
-      {thumbnails.length > 0 && (
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          {thumbnails.map((thumbnail, index) => (
-            <img key={index} src={thumbnail} alt={`Página ${index + 1}`} className="w-full h-auto rounded-lg shadow-md" />
-          ))}
-        </div>
-      )}
-
-      <div className="mt-6 flex space-x-4">
-        <button
-          onClick={handleSubmit}
-          disabled={!file || loading}
-          className={`py-2 px-4 rounded-md text-white font-bold ${loading ? 'bg-indigo-400' : 'bg-indigo-600'}`}
-        >
-          {loading ? `Procesando... ${progress}%` : 'Procesar Documento'}
-        </button>
-        <button onClick={resetForm} className="py-2 px-4 bg-red-600 text-white rounded-md font-semibold">
-          Reiniciar
-        </button>
-        <button onClick={exportToCSV} className="py-2 px-4 bg-green-600 text-white rounded-md font-semibold">
-          Exportar a CSV
-        </button>
-      </div>
-
-      {loading && (
-        <div className="mt-4">
-          <p className="text-center mb-2">Procesando el archivo... {progress}%</p>
-          <div className="w-full bg-gray-500 rounded-full">
-            <div className="bg-indigo-600 text-xs font-medium text-indigo-500 text-center p-0.5 leading-none rounded-full" style={{ width: `${progress}%` }}>
-              {progress}%
-            </div>
+      <div>
+        {/* Mostrar miniaturas de las imágenes procesadas */}
+        {thumbnails.length > 0 && (
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            {thumbnails.map((thumbnail, index) => (
+              <div key={index}>
+                <img
+                  src={thumbnail}
+                  alt={`Procesada ${index + 1}`}
+                  className="w-full h-auto rounded-lg shadow-md"
+                />
+              </div>
+            ))}
           </div>
-        </div>
-      )}
+        )}
 
-      {error && <p className="text-red-600 mt-4">{error}</p>}
+        {/* Botones para procesar documento */}
+        <div className="mt-6 flex flex-wrap space-x-4">
+          <button
+            onClick={handleSubmit}
+            disabled={!file || loading}
+            className={`py-2 px-4 rounded-md text-white font-bold ${
+              loading ? "bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
+          >
+            {loading ? `Procesando... ${progress}%` : "Procesar Documento"}
+          </button>
+          <button
+            onClick={resetForm}
+            className="py-2 px-4 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700"
+          >
+            Reiniciar
+          </button>
+          <button
+            onClick={exportToCSV}
+            disabled={tableData.length === 0 || loading}
+            className={`py-2 px-4 rounded-md text-white font-semibold ${
+              tableData.length > 0 && !loading
+                ? "bg-green-600 hover:bg-green-700"
+                : "bg-green-400 cursor-not-allowed"
+            }`}
+          >
+            Exportar a CSV
+          </button>
+        </div>
+
+        {/* Barra de progreso y mensajes */}
+        <div className="mt-4">
+          {loading && <ProgressBar now={progress} label={`${progress}%`} />}
+          {!loading && progress === 100 && (
+            <div className="success-message text-green-600 font-semibold">
+              ¡Archivo procesado con éxito!
+            </div>
+          )}
+          {error && <p className="text-red-600 mt-4 font-semibold">{error}</p>}
+        </div>
+      </div>
 
       {tableData.length > 0 && (
         <div className="mt-6 overflow-x-auto">
@@ -217,7 +273,10 @@ const OcrUploader: React.FC = () => {
             <thead className="bg-blue-700 text-white">
               <tr>
                 {documentColumns.map((col) => (
-                  <th key={col} className="border px-4 py-2 text-left text-sm font-bold">
+                  <th
+                    key={col}
+                    className="border px-4 py-2 text-left text-sm font-bold"
+                  >
                     {col.toUpperCase()}
                   </th>
                 ))}
@@ -225,11 +284,20 @@ const OcrUploader: React.FC = () => {
             </thead>
             <tbody>
               {tableData.map((row, index) => (
-                <tr key={index} className={`${index % 2 === 0 ? 'bg-gray-600' : 'bg-gray-900'} hover:bg-blue-600`}>
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0 ? "bg-gray-600" : "bg-gray-900"
+                  } hover:bg-blue-600`}
+                >
                   <td className="border px-4 py-2 text-center">{row.bbox}</td>
                   <td className="border px-4 py-2 text-center">{row.class}</td>
-                  <td className="border px-4 py-2 text-center">{row.text || 'No disponible'}</td>
-                  <td className="border px-4 py-2 text-center">{row.confidence.toFixed(2)}</td>
+                  <td className="border px-4 py-2 text-center">
+                    {row.text || "No disponible"}
+                  </td>
+                  <td className="border px-4 py-2 text-center">
+                    {row.confidence.toFixed(2)}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -241,4 +309,3 @@ const OcrUploader: React.FC = () => {
 };
 
 export default OcrUploader;
-
