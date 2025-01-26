@@ -24,7 +24,7 @@ const OcrUploader: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
-  const [tableData, setTableData] = useState<ExtractedRow[]>([]); // Cambiado para usar ExtractedRow
+  const [tableData, setTableData] = useState<ExtractedRow[]>([]); 
   const [documentColumns] = useState<string[]>([
     "bbox",
     "class",
