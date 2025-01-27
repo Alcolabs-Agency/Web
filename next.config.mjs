@@ -11,7 +11,7 @@ const nextConfig = {
             "default-src 'self'; " +
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://cdn.jsdelivr.net; " +
             "worker-src 'self' blob:; " +
-            "connect-src 'self' http://127.0.0.1:5000 http://localhost:5000 blob: data: https://cdn.jsdelivr.net https://backend-ocr.onrender.com https://50d9-186-61-148-188.ngrok-free.app; " +
+            "connect-src 'self' http://127.0.0.1:5000 http://localhost:5000 blob: data: https://cdn.jsdelivr.net https://backend-ocr.onrender.com https://f68e-2802-8010-d540-9700-ae68-8a96-61da-8b00.ngrok-free.app; " +
             "img-src 'self' https://www.gstatic.com data: blob:; " +
             "frame-src 'self' https://calendar.google.com; " +
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +

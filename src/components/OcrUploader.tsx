@@ -85,8 +85,8 @@ const OcrUploader: React.FC = () => {
       setError("Error al generar miniaturas del PDF.");
     }
   };
-
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+ 
   // aqui envia a archivo  backend
   const handleSubmit = async () => {
     if (!file) {
@@ -102,11 +102,15 @@ const OcrUploader: React.FC = () => {
 
     try {
       const response = await fetch(`${baseUrl}/process-document`, {
-        
         method: "POST",
         body: formData,
+        headers: {
+          "Accept": "application/json",
+      },
+      credentials: "include",
       });
-      console.log(baseUrl);
+      console.log("Base URL:", baseUrl);
+
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -114,6 +118,7 @@ const OcrUploader: React.FC = () => {
       }
 
       const result = await response.json();
+      console.log("Datos recibidos:", result);
       const rows: ExtractedRow[] = result.data;
       const processedImages = result.images; // Imágenes procesadas
 
