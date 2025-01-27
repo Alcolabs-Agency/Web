@@ -102,9 +102,11 @@ const OcrUploader: React.FC = () => {
 
     try {
       const response = await fetch(`${baseUrl}/process-document`, {
+        
         method: "POST",
         body: formData,
       });
+      console.log(baseUrl);
 
       if (!response.ok) {
         const errorData = await response.json();
