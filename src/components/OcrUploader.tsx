@@ -3,6 +3,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { ProgressBar } from "react-bootstrap";
 import "./tableStyles.css";
 
+
 let pdfjsLib: any;
 if (typeof window !== "undefined") {
   pdfjsLib = require("pdfjs-dist/legacy/build/pdf");
@@ -219,7 +220,7 @@ const OcrUploader: React.FC = () => {
       <div>
         {/* Mostrar miniaturas de las imágenes procesadas */}
         {thumbnails.length > 0 && (
-          <div className="mt-6 grid grid-cols-2 gap-4">
+          <div className="mt-4 grid grid-cols-2 gap-4">
             {thumbnails.map((thumbnail, index) => (
               <div key={index}>
                 <img
@@ -233,11 +234,11 @@ const OcrUploader: React.FC = () => {
         )}
 
         {/* Botones para procesar documento */}
-        <div className="mt-6 flex flex-wrap space-x-4">
+        <div className="mt-4 flex flex-row space-x-2">
           <button
             onClick={handleSubmit}
             disabled={!file || loading}
-            className={`py-2 px-4 rounded-md text-white font-bold ${
+            className={`py-2 px-2 rounded-md text-white font-bold ${
               loading ? "bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-700"
             }`}
           >
@@ -252,7 +253,7 @@ const OcrUploader: React.FC = () => {
           <button
             onClick={exportToCSV}
             disabled={tableData.length === 0 || loading}
-            className={`py-2 px-4 rounded-md text-white font-semibold ${
+            className={`py-2 px-2 rounded-md text-white font-semibold ${
               tableData.length > 0 && !loading
                 ? "bg-green-600 hover:bg-green-700"
                 : "bg-green-400 cursor-not-allowed"
@@ -267,7 +268,7 @@ const OcrUploader: React.FC = () => {
           {loading && <ProgressBar now={progress} label={`${progress}%`} />}
           {!loading && progress === 100 && (
             <div className="success-message text-green-600 font-semibold">
-              ¡Archivo procesado con éxito!
+              ¡Archivo procesado con éxito! 😊
             </div>
           )}
           {error && <p className="text-red-600 mt-4 font-semibold">{error}</p>}
@@ -277,13 +278,13 @@ const OcrUploader: React.FC = () => {
       {tableData.length > 0 && (
         <div className="mt-6 overflow-x-auto">
           <h3 className="text-lg font-bold text-gray-400">Datos Extraídos</h3>
-          <table className="table-auto w-full bg-gray-500 border border-gray-700 rounded-lg shadow-lg text-black">
-            <thead className="bg-blue-700 text-white">
+          <table className="table-auto w-full bg-gray-300 border border-gray-700 rounded-lg shadow-lg text-black">
+            <thead className="bg-blue-400 text-white">
               <tr>
                 {documentColumns.map((col) => (
                   <th
                     key={col}
-                    className="border px-4 py-2 text-left text-sm font-bold"
+                    className="border px-2 py-2 text-left text-sm font-bold"
                   >
                     {col.toUpperCase()}
                   </th>
@@ -295,12 +296,12 @@ const OcrUploader: React.FC = () => {
                 <tr
                   key={index}
                   className={`${
-                    index % 2 === 0 ? "bg-gray-600" : "bg-gray-900"
-                  } hover:bg-blue-600`}
+                    index % 2 === 0 ? "bg-gray-200" : "bg-gray-400"
+                  } hover:bg-blue-400`}
                 >
-                  <td className="border px-4 py-2 text-center">{row.bbox}</td>
-                  <td className="border px-4 py-2 text-center">{row.class}</td>
-                  <td className="border px-4 py-2 text-center">
+                  <td className="border px-2 py-2 text-center">{row.bbox}</td>
+                  <td className="border px-2 py-2 text-center">{row.class}</td>
+                  <td className="border px-2 py-2 text-center">
                     {row.text || "No disponible"}
                   </td>
                   <td className="border px-4 py-2 text-center">

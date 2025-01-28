@@ -114,3 +114,17 @@
     transition: width 0.4s ease;
   }
 
+
+
+
+  @keyframes blink {
+    0% { color: #158148; } /* Verde inicial */
+    25% { color: #2aff83; } /* Verde más claro */
+    50% { color: #01e759; } /* Verde aún más claro */
+    75% { color: #084b1f; } /* Verde muy claro */
+    100% { color: #7b9226; } /* Volver al verde inicial */
+  }
+  
+  .success-message {
+    animation: blink 1s infinite;
+  }
