@@ -3,7 +3,6 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { ProgressBar } from "react-bootstrap";
 import "./tableStyles.css";
 
-
 let pdfjsLib: any;
 if (typeof window !== "undefined") {
   pdfjsLib = require("pdfjs-dist/legacy/build/pdf");
@@ -25,7 +24,7 @@ const OcrUploader: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
-  const [tableData, setTableData] = useState<ExtractedRow[]>([]); 
+  const [tableData, setTableData] = useState<ExtractedRow[]>([]);
   const [documentColumns] = useState<string[]>([
     "bbox",
     "class",
@@ -40,7 +39,7 @@ const OcrUploader: React.FC = () => {
     if (selectedFile) {
       setFile(selectedFile);
       setError(null);
-      console.log(selectedFile.type)
+      console.log(selectedFile.type);
 
       if (selectedFile.type.startsWith("image/")) {
         setImage(URL.createObjectURL(selectedFile));
@@ -87,7 +86,7 @@ const OcrUploader: React.FC = () => {
     }
   };
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
- 
+
   // aqui envia a archivo  backend
   const handleSubmit = async () => {
     if (!file) {
@@ -106,51 +105,72 @@ const OcrUploader: React.FC = () => {
         method: "POST",
         body: formData,
         headers: {
-          "Accept": "application/json",
-      },
-      credentials: "include",
+          Accept: "application/json",
+        },
+        credentials: "include",
       });
-      console.log("Base URL:", baseUrl);
-
+      console.log("📡 Base URL:", baseUrl);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Error al procesar el documento.");
+        let errorMessage = "Error al procesar el documento.";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (err) {
+          console.error("Error al procesar el documento:", err);
+        }
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();
-      console.log("Datos recibidos:", result);
+      console.log("✅Datos recibidos:", result);
       const rows: ExtractedRow[] = result.data;
       const processedImages = result.images; // Imágenes procesadas
 
-      if (Array.isArray(rows) && rows.length > 0) {
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        interface ApiResponse {
+          data: {
+            bbox: string;
+            class: string;
+            text: string;
+            confidence: number;
+          }[];
+          images: string[];
+        }
 
-        setTableData(rows.map(row => ({
-          bbox: row.bbox,
-          class: row.class,
-          text: row.text,
-          confidence: typeof row.confidence === 'number' ? row.confidence : 0
-        })));
+        const processApiResponse = (result: ApiResponse) => {
+          setTableData(
+            result.data.map((row: ExtractedRow) => ({
+              bbox: row.bbox,
+              class: row.class,
+              text: row.text,
+              confidence:
+                typeof row.confidence === "number" ? row.confidence : 0,
+            }))
+          );
+        };
+
+        processApiResponse(result);
       } else {
-        setError("El modelo no detectó datos en el documento. Verifica que el documento contiene las clases esperadas.");
+        setError(
+          "El modelo no detectó datos en el documento. Verifica que el documento contiene las clases esperadas."
+        );
       }
-      
 
       if (processedImages?.length > 0) {
         setThumbnails(
-            processedImages.map((img: string) => `data:image/jpeg;base64,${img}`)
+          processedImages.map((img: string) => `data:image/jpeg;base64,${img}`)
         );
-    } else {
+      } else {
         setThumbnails([]);
-    }
-    
+      }
 
       setProgress(100);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Error al procesar el documento."
       );
-      console.error("Error al procesar el documento:", err);
+      console.error("❌Error al procesar el documento:", err);
     } finally {
       setLoading(false);
     }
@@ -233,7 +253,6 @@ const OcrUploader: React.FC = () => {
           </div>
         )}
 
-        {/* Botones para procesar documento */}
         <div className="mt-4 flex flex-row space-x-2">
           <button
             onClick={handleSubmit}
@@ -263,7 +282,6 @@ const OcrUploader: React.FC = () => {
           </button>
         </div>
 
-        {/* Barra de progreso y mensajes */}
         <div className="mt-4">
           {loading && <ProgressBar now={progress} label={`${progress}%`} />}
           {!loading && progress === 100 && (
@@ -301,11 +319,36 @@ const OcrUploader: React.FC = () => {
                 >
                   <td className="border px-2 py-2 text-center">{row.bbox}</td>
                   <td className="border px-2 py-2 text-center">{row.class}</td>
-                  <td className="border px-2 py-2 text-center">
-                    {row.text || "No disponible"}
-                  </td>
-                  <td className="border px-4 py-2 text-center">
-                    {row.confidence.toFixed(2)}
+                  <td className="border px-2 py-2 text-left break-words whitespace-normal">
+                    {row.class === "descripcion" ? (
+                      <div className="flex flex-col">
+                        {row.text
+                          .split(/\s+/) //dividir espacios
+                          .reduce(
+                            (acc: string[], word: string, index: number) => {
+                              if (index % 5 === 0) acc.push(""); // Cada 5 palabras, hacer un nuevo renglón
+                              acc[acc.length - 1] += `${word} `;
+                              return acc;
+                            },
+                            []
+                          )
+                          .map((line, i) => (
+                            <span key={i} className="block">
+                              {line.trim()}
+                            </span>
+                          ))}
+                      </div>
+                    ) : ["cantidad", "precio_unitario", "precio_total"].includes(row.class) ? (
+                      <div className="flex flex-col text-left">
+                        {row.text.split(/\s+/).map((line, i) => (
+                          <span key={i} className="block">
+                            {line}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      row.text || "No disponible"
+                    )}
                   </td>
                 </tr>
               ))}

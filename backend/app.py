@@ -12,7 +12,8 @@ from pathlib import Path
 
 # Configuración Base
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / 'yolov5/runs/train/exp4/weights/best.pt'
+MODEL_PATH = Path('/home/yesenia/Escritorio/react/Alcolab/Web/backend/backup-backend-ocr.git/yolov5/runs/train/exp_retrain/weights/best.pt')
+
 
 # Verificar si el modelo existe
 if not MODEL_PATH.exists():
@@ -41,11 +42,16 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
 
+
+
 def preprocess_image(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-    thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
+    """Preprocesa la imagen para mejorar la detección del OCR"""
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convertir a escala de grises
+    blurred = cv2.GaussianBlur(gray, (3, 3), 0)  # Reducir ruido con desenfoque
+    thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                   cv2.THRESH_BINARY, 11, 2)  # Binarización adaptativa
     return thresh
+
 
 
 def detect_sections(image):

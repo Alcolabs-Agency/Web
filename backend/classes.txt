@@ -1,0 +1,7 @@
+Descripcion
+Cantidad
+unidades
+unidad
+Cajas_cantidad
+Articulo
+Nombre_del_producto
